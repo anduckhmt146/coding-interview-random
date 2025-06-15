@@ -31,11 +31,39 @@ function pickUniqueSets(
   return result;
 }
 
+const CACHE_KEY = 'parsedLeetQuestions';
+const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24; // 24 hours
+
 export default function RandomQuestionPicker() {
   const [randomSets, setRandomSets] = useState<Question[][] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadFromCache = (): Question[] | null => {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+
+        const { data, expires } = JSON.parse(raw);
+        if (Date.now() > expires) return null;
+
+        return data as Question[];
+      } catch (e) {
+        console.warn('Invalid cache data', e);
+        return null;
+      }
+    };
+
+    const saveToCache = (data: Question[]) => {
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          data,
+          expires: Date.now() + CACHE_EXPIRY_MS,
+        })
+      );
+    };
+
     async function loadCSVData(): Promise<Question[]> {
       const modules1 = import.meta.glob(
         '../assets/data/LeetCode-Questions-CompanyWise/*.csv',
@@ -53,7 +81,6 @@ export default function RandomQuestionPicker() {
 
       const shuffledEntries = shuffle(allEntries);
 
-      // Load and parse all CSVs in parallel
       const results = await Promise.all(
         shuffledEntries.map(async ([, loader]) => {
           try {
@@ -72,15 +99,16 @@ export default function RandomQuestionPicker() {
       );
 
       const firstValid = results.find((data) => data !== null);
-      if (!firstValid) {
-        throw new Error('Not enough valid questions found.');
-      }
+      if (!firstValid) throw new Error('Not enough valid questions found.');
+
+      saveToCache(firstValid);
       return firstValid;
     }
 
     async function init() {
       try {
-        const questions = await loadCSVData();
+        const cached = loadFromCache();
+        const questions = cached || (await loadCSVData());
         const sets = pickUniqueSets(questions, 1, 3); // 1 set, 3 questions
         setRandomSets(sets);
       } catch (err) {
