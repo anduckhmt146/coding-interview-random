@@ -88,7 +88,11 @@ export default function RandomQuestionPicker() {
   }, []);
 
   if (loading || !randomSets) {
-    return <div className="p-6 text-lg">⏳ Loading questions...</div>;
+    return (
+      <div className="p-6 flex justify-center items-center">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (
