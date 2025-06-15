@@ -1,0 +1,3 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+HARD,Trapping Rain Water,100.0,0.6495026022460716,https://leetcode.com/problems/trapping-rain-water,"Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack"
+MEDIUM,String Compression,100.0,0.5795992490056892,https://leetcode.com/problems/string-compression,"Two Pointers, String"

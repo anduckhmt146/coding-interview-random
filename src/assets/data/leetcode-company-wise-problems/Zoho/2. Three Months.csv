@@ -1,0 +1,8 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+HARD,Regular Expression Matching,100.0,0.29230140005529026,https://leetcode.com/problems/regular-expression-matching,"String, Dynamic Programming, Recursion"
+MEDIUM,Maximum Number of Events That Can Be Attended,80.7,0.3289582864211088,https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended,"Array, Greedy, Sorting, Heap (Priority Queue)"
+HARD,Dungeon Game,80.7,0.3942936803257788,https://leetcode.com/problems/dungeon-game,"Array, Dynamic Programming, Matrix"
+HARD,Wildcard Matching,80.7,0.2978586002439738,https://leetcode.com/problems/wildcard-matching,"String, Dynamic Programming, Greedy, Recursion"
+EASY,Climbing Stairs,80.7,0.5350778102726376,https://leetcode.com/problems/climbing-stairs,"Math, Dynamic Programming, Memoization"
+HARD,Trapping Rain Water,80.7,0.6495017568112434,https://leetcode.com/problems/trapping-rain-water,"Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack"
+MEDIUM,Longest Substring Without Repeating Characters,80.7,0.36821900338395763,https://leetcode.com/problems/longest-substring-without-repeating-characters,"Hash Table, String, Sliding Window"

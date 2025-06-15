@@ -1,0 +1,7 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+EASY,Two Sum,100.0,0.5568027255053397,https://leetcode.com/problems/two-sum,"Array, Hash Table"
+MEDIUM,Longest Substring Without Repeating Characters,94.3,0.36822041940957545,https://leetcode.com/problems/longest-substring-without-repeating-characters,"Hash Table, String, Sliding Window"
+EASY,Longest Common Prefix,76.4,0.45372652291817245,https://leetcode.com/problems/longest-common-prefix,"String, Trie"
+MEDIUM,Longest Palindromic Substring,76.4,0.357443966954791,https://leetcode.com/problems/longest-palindromic-substring,"Two Pointers, String, Dynamic Programming"
+EASY,Duplicate Emails,76.4,0.7238909362138954,https://leetcode.com/problems/duplicate-emails,Database
+MEDIUM,Two Sum II - Input Array Is Sorted,76.4,0.6331399485985627,https://leetcode.com/problems/two-sum-ii-input-array-is-sorted,"Array, Two Pointers, Binary Search"
