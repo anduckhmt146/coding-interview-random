@@ -38,11 +38,11 @@ export default function RandomQuestionPicker() {
   useEffect(() => {
     async function loadCSVData(): Promise<Question[]> {
       const modules1 = import.meta.glob(
-        '../data/LeetCode-Questions-CompanyWise/*.csv',
+        '../assets/data/LeetCode-Questions-CompanyWise/*.csv',
         { as: 'raw' }
       );
       const modules2 = import.meta.glob(
-        '../data/leetcode-company-wise-problems/**/*.csv',
+        '../assets/data/leetcode-company-wise-problems/**/*.csv',
         { as: 'raw' }
       );
 
