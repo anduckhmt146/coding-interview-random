@@ -32,7 +32,7 @@ function pickUniqueSets(
 }
 
 const CACHE_KEY = 'parsedLeetQuestions';
-const CACHE_EXPIRY_MS = 1000 * 60 * 60 * 24; // 24 hours
+const CACHE_EXPIRY_MS = 1000 * 60 * 10; // 10 minutes
 
 export default function RandomQuestionPicker() {
   const [randomSets, setRandomSets] = useState<Question[][] | null>(null);
