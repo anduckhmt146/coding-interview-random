@@ -122,6 +122,16 @@ export default function RandomQuestionPicker() {
           </ul>
         </div>
       ))}
+      <footer className="fixed bottom-0 w-full bg-white text-center shadow-md py-3 text-md text-gray-700">
+        @2025, Made with ❤️ by{' '}
+        <a
+          href="https://github.com/anduckhmt146/coding-interview-random"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 font-medium hover:underline hover:text-blue-800 transition-colors duration-200">
+          anduckhmt146
+        </a>
+      </footer>
     </div>
   );
 }
