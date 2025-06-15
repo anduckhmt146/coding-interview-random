@@ -53,28 +53,35 @@ export default function RandomQuestionPicker() {
 
       const shuffledEntries = shuffle(allEntries);
 
-      for (const [, loader] of shuffledEntries) {
-        try {
-          const raw = await loader();
-          const parsed = Papa.parse<Question>(raw, {
-            header: true,
-            skipEmptyLines: true,
-          });
+      // Load and parse all CSVs in parallel
+      const results = await Promise.all(
+        shuffledEntries.map(async ([, loader]) => {
+          try {
+            const raw = await loader();
+            const parsed = Papa.parse<Question>(raw, {
+              header: true,
+              skipEmptyLines: true,
+            });
+            const data = parsed.data.filter((q) => q.ID && q.Title);
+            return data.length >= 9 ? data : null;
+          } catch (err) {
+            console.warn('Skipping invalid CSV:', err);
+            return null;
+          }
+        })
+      );
 
-          const data = parsed.data.filter((q) => q.ID && q.Title);
-          if (data.length >= 9) return data;
-        } catch (err) {
-          console.warn('Skipping invalid CSV:', err);
-        }
+      const firstValid = results.find((data) => data !== null);
+      if (!firstValid) {
+        throw new Error('Not enough valid questions found.');
       }
-
-      throw new Error('Not enough valid questions found.');
+      return firstValid;
     }
 
     async function init() {
       try {
         const questions = await loadCSVData();
-        const sets = pickUniqueSets(questions, 1, 3); // 3 sets, 3 questions each
+        const sets = pickUniqueSets(questions, 1, 3); // 1 set, 3 questions
         setRandomSets(sets);
       } catch (err) {
         console.error(err);
