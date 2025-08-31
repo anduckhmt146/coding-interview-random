@@ -8,8 +8,8 @@ function App() {
     <Router>
       <Routes>
         {/* <Route path="/" element={<RandomQuestionPicker />} /> */}
-        <Route path="/leetcode-500" element={<RandomReadMePicker />} />
-        <Route path="/leetcode-500/history" element={<HistoryQuestion />} />
+        <Route path="/" element={<RandomReadMePicker />} />
+        <Route path="/history" element={<HistoryQuestion />} />
       </Routes>
     </Router>
   );
