@@ -11,12 +11,14 @@ export interface Question {
 
 const STORAGE_KEY = 'completedQuestions';
 const ALL_QUESTIONS_KEY = 'allQuestions';
+const TIMER_KEY = 'countdownStart';
 
 const RandomReadMePicker: React.FC = () => {
   const navigate = useNavigate();
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [randomThree, setRandomThree] = useState<Question[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
+  const [timeLeft, setTimeLeft] = useState<number>(3600); // seconds (1h)
 
   // ✅ Safe localStorage load
   const loadCompleted = (): string[] => {
@@ -42,15 +44,12 @@ const RandomReadMePicker: React.FC = () => {
   };
 
   useEffect(() => {
-    // Load completed from localStorage
     const savedCompleted = loadCompleted();
     setCompleted(savedCompleted);
 
-    // Try loading questions from localStorage first
+    // Load questions
     let parsed = loadAllQuestions();
-
     if (parsed.length === 0) {
-      // Parse README.md only once
       const rows = rawReadme
         .split('\n')
         .filter(
@@ -70,16 +69,32 @@ const RandomReadMePicker: React.FC = () => {
             solution: cols[5] || '',
           };
         })
-        .filter((q) => q.name); // remove empty ones
+        .filter((q) => q.name);
 
-      // Save parsed questions to localStorage
       localStorage.setItem(ALL_QUESTIONS_KEY, JSON.stringify(parsed));
     }
-
     setAllQuestions(parsed);
-
-    // Initial random pick
     pickRandom(parsed, savedCompleted);
+
+    // ⏳ Countdown logic
+    const savedStart = localStorage.getItem(TIMER_KEY);
+    let startTime: number;
+    if (savedStart) {
+      startTime = parseInt(savedStart, 10);
+    } else {
+      startTime = Date.now();
+      localStorage.setItem(TIMER_KEY, startTime.toString());
+    }
+
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.max(0, 3600 - elapsed);
+      setTimeLeft(remaining);
+
+      if (remaining === 0) clearInterval(interval);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const pickRandom = (questions: Question[], done: string[] = []) => {
@@ -95,13 +110,12 @@ const RandomReadMePicker: React.FC = () => {
     setRandomThree(shuffled.slice(0, 3));
   };
 
-  // ✅ Toggle complete/uncomplete
   const toggleCompleted = (name: string) => {
     let updated: string[];
     if (completed.includes(name)) {
-      updated = completed.filter((n) => n !== name); // remove
+      updated = completed.filter((n) => n !== name);
     } else {
-      updated = [...completed, name]; // add
+      updated = [...completed, name];
     }
     setCompleted(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -114,11 +128,27 @@ const RandomReadMePicker: React.FC = () => {
     return { text: match[1], url: match[2] };
   };
 
+  // Format time as mm:ss
+  const formatTime = (sec: number) => {
+    const m = Math.floor(sec / 60)
+      .toString()
+      .padStart(2, '0');
+    const s = (sec % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
+
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">
-        📖 Random Leetcode 500 Questions
+        📖 Mock Interview Leetcode 500 Questions
       </h1>
+
+      {/* Countdown Timer */}
+      <div className="mb-4">
+        <span className="inline-flex items-center px-3 py-2 rounded-md text-lg font-semibold bg-red-100 text-red-700">
+          ⏳ Time left: {formatTime(timeLeft)}
+        </span>
+      </div>
 
       <div className="flex justify-between items-center">
         <button
@@ -127,9 +157,9 @@ const RandomReadMePicker: React.FC = () => {
           🔄 Pick Again
         </button>
         <button
-          className="mb-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          className="mb-4 px-4 py-2 flex items-center gap-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
           onClick={() => navigate('/history')}>
-          View History
+          📝 View History
         </button>
       </div>
 

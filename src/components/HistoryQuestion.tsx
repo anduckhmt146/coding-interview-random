@@ -59,7 +59,7 @@ const HistoryQuestion: React.FC = () => {
       <button
         onClick={() => navigate(-1)}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-        View all questions
+        📊 View all questions
       </button>
 
       {/* Topic Filter */}
