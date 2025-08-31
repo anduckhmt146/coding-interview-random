@@ -128,7 +128,7 @@ const RandomReadMePicker: React.FC = () => {
         </button>
         <button
           className="mb-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          onClick={() => navigate('/leetcode-500/history')}>
+          onClick={() => navigate('/history')}>
           View History
         </button>
       </div>
