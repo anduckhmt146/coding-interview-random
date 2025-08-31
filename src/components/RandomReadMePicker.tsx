@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import rawReadme from '../assets/leetcode-500/README.md?raw';
 import { useNavigate } from 'react-router-dom';
+import rawReadme from '../assets/leetcode-500/README.md?raw';
 
 export interface Question {
   name: string;
@@ -18,9 +18,15 @@ const RandomReadMePicker: React.FC = () => {
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [randomThree, setRandomThree] = useState<Question[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
-  const [timeLeft, setTimeLeft] = useState<number>(3600); // seconds (1h)
+  const [timeLeft, setTimeLeft] = useState<number>(3600);
 
-  // ✅ Safe localStorage load
+  // ✅ Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<'pickAgain' | 'history' | null>(
+    null
+  );
+
+  // --- Helpers ---
   const loadCompleted = (): string[] => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -76,21 +82,15 @@ const RandomReadMePicker: React.FC = () => {
     setAllQuestions(parsed);
     pickRandom(parsed, savedCompleted);
 
-    // ⏳ Countdown logic
-    const savedStart = localStorage.getItem(TIMER_KEY);
-    let startTime: number;
-    if (savedStart) {
-      startTime = parseInt(savedStart, 10);
-    } else {
-      startTime = Date.now();
-      localStorage.setItem(TIMER_KEY, startTime.toString());
-    }
+    // ⏳ Countdown
+    const startTime = Date.now();
+    localStorage.setItem(TIMER_KEY, startTime.toString());
+    setTimeLeft(3600);
 
     const interval = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const remaining = Math.max(0, 3600 - elapsed);
       setTimeLeft(remaining);
-
       if (remaining === 0) clearInterval(interval);
     }, 1000);
 
@@ -119,7 +119,7 @@ const RandomReadMePicker: React.FC = () => {
     }
     setCompleted(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    pickRandom(allQuestions, updated);
+    // no auto re-pick
   };
 
   const parseMarkdownLink = (str: string) => {
@@ -128,7 +128,6 @@ const RandomReadMePicker: React.FC = () => {
     return { text: match[1], url: match[2] };
   };
 
-  // Format time as mm:ss
   const formatTime = (sec: number) => {
     const m = Math.floor(sec / 60)
       .toString()
@@ -143,26 +142,34 @@ const RandomReadMePicker: React.FC = () => {
         📖 Mock Interview Leetcode 500 Questions
       </h1>
 
-      {/* Countdown Timer */}
+      {/* Countdown */}
       <div className="mb-4">
         <span className="inline-flex items-center px-3 py-2 rounded-md text-lg font-semibold bg-red-100 text-red-700">
           ⏳ Time left: {formatTime(timeLeft)}
         </span>
       </div>
 
+      {/* Buttons */}
       <div className="flex justify-between items-center">
         <button
-          onClick={() => pickRandom(allQuestions, completed)}
+          onClick={() => {
+            setModalType('pickAgain');
+            setShowModal(true);
+          }}
           className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
           🔄 Pick Again
         </button>
         <button
-          className="mb-4 px-4 py-2 flex items-center gap-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          onClick={() => navigate('/history')}>
+          onClick={() => {
+            setModalType('history');
+            setShowModal(true);
+          }}
+          className="mb-4 px-4 py-2 flex items-center gap-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
           📝 View History
         </button>
       </div>
 
+      {/* Questions */}
       {randomThree.length === 0 && (
         <p className="text-gray-500">🎉 All questions completed!</p>
       )}
@@ -200,7 +207,6 @@ const RandomReadMePicker: React.FC = () => {
                   </button>
                 </h2>
               )}
-
               {q.pattern && (
                 <p className="text-sm text-gray-600">
                   <strong>Topic:</strong> {q.pattern}
@@ -215,6 +221,43 @@ const RandomReadMePicker: React.FC = () => {
           );
         })}
       </div>
+
+      {/* ✅ Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
+            <h2 className="text-xl font-bold mb-4">
+              {modalType === 'pickAgain'
+                ? 'Pick New Questions?'
+                : 'Go To History?'}
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {modalType === 'pickAgain'
+                ? 'This will replace your current questions with new ones.'
+                : 'This will reset your current random questions.'}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (modalType === 'pickAgain') {
+                    pickRandom(allQuestions, completed);
+                  } else if (modalType === 'history') {
+                    navigate('/history');
+                  }
+                  setShowModal(false);
+                }}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
