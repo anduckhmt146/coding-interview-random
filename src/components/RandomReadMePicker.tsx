@@ -64,7 +64,7 @@ const RandomReadMePicker: React.FC = () => {
         .map((row) => {
           const cols = row.split('|').map((c) => c.trim());
           return {
-            name: cols[2] || '',
+            name: cols[3] || '',
             topic: cols[3] || '',
             pattern: cols[4] || '',
             solution: cols[5] || '',
