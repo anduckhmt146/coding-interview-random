@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Question } from './RandomReadMePicker';
+import { useNavigate } from 'react-router-dom';
 
 const STORAGE_KEY = 'completedQuestions';
 const ALL_QUESTIONS_KEY = 'allQuestions';
@@ -50,9 +51,16 @@ const HistoryQuestion: React.FC = () => {
       ? completedQuestions
       : completedQuestions.filter((q) => q.pattern === selectedTopic);
 
+  const navigate = useNavigate();
+
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">✅ Completed Questions</h1>
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        View all questions
+      </button>
 
       {/* Topic Filter */}
       {uniqueTopics.length > 0 && (
