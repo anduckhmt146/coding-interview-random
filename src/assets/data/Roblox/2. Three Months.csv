@@ -1,0 +1,7 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+MEDIUM,Reorganize String,100.0,0.5613764389466123,https://leetcode.com/problems/reorganize-string,"Hash Table, String, Greedy, Sorting, Heap (Priority Queue), Counting"
+MEDIUM,Task Scheduler,79.5,0.6142509554277709,https://leetcode.com/problems/task-scheduler,"Array, Hash Table, Greedy, Sorting, Heap (Priority Queue), Counting"
+MEDIUM,Rotating the Box,75.0,0.7908581906964526,https://leetcode.com/problems/rotating-the-box,"Array, Two Pointers, Matrix"
+MEDIUM,Implement Trie (Prefix Tree),69.3,0.6781135061433737,https://leetcode.com/problems/implement-trie-prefix-tree,"Hash Table, String, Design, Trie"
+EASY,Valid Parentheses,61.2,0.4224529487418841,https://leetcode.com/problems/valid-parentheses,"String, Stack"
+HARD,Trapping Rain Water,61.2,0.64950151454514,https://leetcode.com/problems/trapping-rain-water,"Array, Two Pointers, Dynamic Programming, Stack, Monotonic Stack"

@@ -1,0 +1,9 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+MEDIUM,LRU Cache,100.0,0.4507741235902909,https://leetcode.com/problems/lru-cache,"Hash Table, Linked List, Design, Doubly-Linked List"
+MEDIUM,Group Anagrams,100.0,0.7083641460364128,https://leetcode.com/problems/group-anagrams,"Array, Hash Table, String, Sorting"
+MEDIUM,Longest Substring Without Repeating Characters,100.0,0.3682179893349592,https://leetcode.com/problems/longest-substring-without-repeating-characters,"Hash Table, String, Sliding Window"
+HARD,Number of Visible People in a Queue,80.4,0.7126058284733836,https://leetcode.com/problems/number-of-visible-people-in-a-queue,"Array, Stack, Monotonic Stack"
+MEDIUM,Top K Frequent Elements,80.4,0.6447821145339919,https://leetcode.com/problems/top-k-frequent-elements,"Array, Hash Table, Divide and Conquer, Sorting, Heap (Priority Queue), Bucket Sort, Counting, Quickselect"
+MEDIUM,Number of Islands,80.4,0.6219955580938793,https://leetcode.com/problems/number-of-islands,"Array, Depth-First Search, Breadth-First Search, Union Find, Matrix"
+MEDIUM,Koko Eating Bananas,80.4,0.4905271841507562,https://leetcode.com/problems/koko-eating-bananas,"Array, Binary Search"
+MEDIUM,Permutation in String,80.4,0.471606582696891,https://leetcode.com/problems/permutation-in-string,"Hash Table, Two Pointers, String, Sliding Window"

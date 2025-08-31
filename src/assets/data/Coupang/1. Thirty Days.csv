@@ -1,0 +1,3 @@
+Difficulty,Title,Frequency,Acceptance Rate,Link,Topics
+MEDIUM,Remove K Digits,100.0,0.34811436657995065,https://leetcode.com/problems/remove-k-digits,"String, Stack, Greedy, Monotonic Stack"
+MEDIUM,Snapshot Array,100.0,0.3666383300841386,https://leetcode.com/problems/snapshot-array,"Array, Hash Table, Binary Search, Design"
