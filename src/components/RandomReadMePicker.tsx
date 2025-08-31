@@ -101,7 +101,7 @@ const RandomReadMePicker: React.FC = () => {
     const doneSet = Array.isArray(done) ? done : [];
 
     // ✅ filter only names starting with `**`
-    const filtered = questions.filter((q) => q.name.trim().startsWith('**'));
+    const filtered = questions.filter((q) => !q.name.trim().startsWith('**'));
 
     // ✅ then remove completed ones
     const remaining = filtered.filter((q) => !doneSet.includes(q.name));
