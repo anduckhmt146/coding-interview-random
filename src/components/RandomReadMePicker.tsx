@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import rawReadme from '../assets/leetcode-500/README.md?raw';
 
@@ -26,6 +26,9 @@ const RandomReadMePicker: React.FC = () => {
     null
   );
 
+  // ⏳ Ref for countdown interval
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   // --- Helpers ---
   const loadCompleted = (): string[] => {
     try {
@@ -47,6 +50,22 @@ const RandomReadMePicker: React.FC = () => {
       return [];
     }
     return [];
+  };
+
+  // ✅ Countdown starter
+  const startCountdown = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    const startTime = Date.now();
+    localStorage.setItem(TIMER_KEY, startTime.toString());
+    setTimeLeft(3600);
+
+    timerRef.current = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.max(0, 3600 - elapsed);
+      setTimeLeft(remaining);
+      if (remaining === 0 && timerRef.current) clearInterval(timerRef.current);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -82,19 +101,12 @@ const RandomReadMePicker: React.FC = () => {
     setAllQuestions(parsed);
     pickRandom(parsed, savedCompleted);
 
-    // ⏳ Countdown
-    const startTime = Date.now();
-    localStorage.setItem(TIMER_KEY, startTime.toString());
-    setTimeLeft(3600);
+    // ⏳ Start countdown on mount
+    startCountdown();
 
-    const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startTime) / 1000);
-      const remaining = Math.max(0, 3600 - elapsed);
-      setTimeLeft(remaining);
-      if (remaining === 0) clearInterval(interval);
-    }, 1000);
-
-    return () => clearInterval(interval);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, []);
 
   const pickRandom = (questions: Question[], done: string[] = []) => {
@@ -237,7 +249,7 @@ const RandomReadMePicker: React.FC = () => {
             </h2>
             <p className="text-gray-600 mb-6">
               {modalType === 'pickAgain'
-                ? 'This will replace your current questions with new ones.'
+                ? 'This will replace your current questions and restart the timer.'
                 : 'This will reset your current random questions.'}
             </p>
             <div className="flex justify-end gap-3">
@@ -250,6 +262,7 @@ const RandomReadMePicker: React.FC = () => {
                 onClick={() => {
                   if (modalType === 'pickAgain') {
                     pickRandom(allQuestions, completed);
+                    startCountdown(); // ⏳ reset timer
                   } else if (modalType === 'history') {
                     navigate('/history');
                   }
