@@ -99,7 +99,12 @@ const RandomReadMePicker: React.FC = () => {
 
   const pickRandom = (questions: Question[], done: string[] = []) => {
     const doneSet = Array.isArray(done) ? done : [];
-    const remaining = questions.filter((q) => !doneSet.includes(q.name));
+
+    // ✅ filter only names starting with `**`
+    const filtered = questions.filter((q) => q.name.trim().startsWith('**'));
+
+    // ✅ then remove completed ones
+    const remaining = filtered.filter((q) => !doneSet.includes(q.name));
 
     if (remaining.length === 0) {
       setRandomThree([]);
@@ -119,7 +124,6 @@ const RandomReadMePicker: React.FC = () => {
     }
     setCompleted(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    // no auto re-pick
   };
 
   const parseMarkdownLink = (str: string) => {
